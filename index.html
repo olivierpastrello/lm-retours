@@ -505,7 +505,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .nav-tabs{gap:4px;flex-wrap:nowrap;flex-shrink:1;min-width:0}
   .nav-tab{font-size:11px;padding:5px 10px;white-space:nowrap}
   .header-right{flex-shrink:0;gap:4px}
-  .user-badge{display:none}
+  .user-badge{display:none !important}
   .btn-logout{padding:5px 8px;font-size:11px}
   .badge-ref{display:none}
 }
@@ -1079,7 +1079,11 @@ function renderNav(){
     hb.id="hamBtn";hb.className="ham-btn";hb.innerHTML="&#9776;";hb.title="Menu";
     if(extra.some(function(t){return t.id===currentPage;}))hb.classList.add("active");
     hb.onclick=openHam;
-    navEl.parentElement.appendChild(hb);
+    // Insérer le ☰ dans header-inner AVANT le logo (à gauche)
+    var hdrInner=document.querySelector(".header-inner");
+    var logo=document.querySelector(".header-logo");
+    if(hdrInner && logo) hdrInner.insertBefore(hb, logo);
+    else navEl.parentElement.appendChild(hb);
   }
   // Remplir le panneau hamburger
   var hamItems=document.getElementById("hamItems");
@@ -1093,6 +1097,26 @@ function renderNav(){
       hamItems.appendChild(btn);
       if(i<tabs.length-1){var sep=document.createElement("div");sep.className="ham-sep";hamItems.appendChild(sep);}
     });
+    // Séparateur + infos utilisateur + déconnexion + version
+    var sep2=document.createElement("div");sep2.className="ham-sep";sep2.style.margin="12px 0";hamItems.appendChild(sep2);
+    // Utilisateur
+    if(currentUser){
+      var uinfo=document.createElement("div");
+      uinfo.style.cssText="padding:8px 20px;font-size:12px;color:rgba(255,255,255,.4);";
+      uinfo.textContent=(currentUser.username||"")+" · "+(currentUser.role||"");
+      hamItems.appendChild(uinfo);
+    }
+    // Déconnexion
+    var logoutBtn=document.createElement("button");
+    logoutBtn.className="ham-item";
+    logoutBtn.innerHTML='<span class="ham-item-icon">🚪</span>Déconnexion';
+    logoutBtn.onclick=function(){closeHam();logout();};
+    hamItems.appendChild(logoutBtn);
+    // Version
+    var vinfo=document.createElement("div");
+    vinfo.style.cssText="padding:10px 20px;font-size:11px;color:rgba(255,255,255,.25);";
+    vinfo.textContent="v"+APP_VERSION;
+    hamItems.appendChild(vinfo);
   }
   const roleLabel={admin:"Admin",superviseur:"Superviseur",boutique:"Boutique",lecteur:"Lecteur"}[currentUser.role]||"";
   const roleClass="role-"+(currentUser.role==="lecteur"?"superviseur":currentUser.role);
@@ -2785,7 +2809,6 @@ async function subscribeToPush() {
     const payload = {
       user_id:   currentUser.id,
       username:  currentUser.username,
-      role:      currentUser.role,
       endpoint:  subJson.endpoint,
       p256dh:    subJson.keys.p256dh,
       auth:      subJson.keys.auth
@@ -2803,8 +2826,7 @@ async function subscribeToPush() {
     if(!postRes.ok){
       const errText = await postRes.text();
       console.error("Push subscription DB error:", postRes.status, errText);
-      toast("Souscription active mais non sauvegardée en base ("+postRes.status+").", "info");
-      return true;
+      throw new Error("Erreur sauvegarde souscription ("+postRes.status+"): "+errText.slice(0,120));
     }
     console.log("Push subscription saved to DB ✅");
     return true;
