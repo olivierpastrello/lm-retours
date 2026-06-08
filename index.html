@@ -275,7 +275,8 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 .photo-card:hover .photo-card-dl a{opacity:1}
 
 /* ── VERSION ── */
-.version-badge{font-size:10px;color:var(--c-muted);font-weight:500;letter-spacing:.3px;margin-left:2px;align-self:flex-end;padding-bottom:2px}
+.version-badge{display:none}
+.version-badge-full{font-size:10px;color:var(--c-muted);font-weight:500;letter-spacing:.3px;margin-left:2px;align-self:flex-end;padding-bottom:2px}
 
 
 
@@ -499,7 +500,8 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 
 /* ── MOBILE HEADER : 2 lignes ── */
 @media(max-width:640px){
-  html,body{max-width:100vw;overflow-x:hidden}
+  html,body{max-width:100vw;overflow-x:clip}
+  .version-badge{display:none!important}
   /* Ligne 1 : logo pleine largeur */
   .header-inner{flex-direction:column;align-items:stretch;padding:8px 14px 6px;gap:4px;overflow-x:clip}
   .header-logo{width:100%;padding:2px 0}
@@ -534,7 +536,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   padding-bottom:env(safe-area-inset-bottom,0px);
   box-shadow:0 -2px 12px rgba(28,26,23,.06);
 }
-#footerNav.visible{display:flex}
+#footerNav.visible{display:flex;position:fixed;bottom:0;left:0;right:0}
 .fn-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;padding:8px 4px 6px;
@@ -551,7 +553,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 
 /* ── MOBILE HEADER ──────────────────────── */
 @media(max-width:640px){
-  html,body{max-width:100vw;overflow-x:hidden}
+  html,body{max-width:100vw;overflow-x:clip}
   .header-inner{
     flex-direction:row;flex-wrap:nowrap;align-items:center;
     padding:10px 14px;gap:0;overflow-x:clip;
@@ -564,6 +566,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .header-logo{flex:1;text-align:center}
   .header-logo img{height:32px}
   .header-right{flex-shrink:0;display:flex;align-items:center;gap:6px}
+  #notifBellWrap[style*="flex"]{display:flex!important}
   .nav-tabs{display:none!important}
   .btn-logout{display:none!important}
   .user-badge{display:none!important}
@@ -649,7 +652,6 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
     <div class="ham-items" id="hamItems"></div>
   </div>
 </div>
-<nav id="footerNav" aria-label="Navigation"></nav>
 <div id="appShell" style="display:none">
 
 <header>
@@ -659,7 +661,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
     <div class="version-badge">v2.0.1</div>
     <div class="header-right">
       <div class="nav-tabs" id="navTabs"></div>
-      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none">
+      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none" data-role-only="admin,superviseur">
         <div class="notif-bell" onclick="toggleNotifPanel()" title="Notifications">🔔
           <div class="notif-dot" id="notifDot"></div>
         </div>
@@ -3118,5 +3120,6 @@ init();
     </div>
   </div>
 </div>
+<nav id="footerNav" aria-label="Navigation"></nav>
 </body>
 </html>
