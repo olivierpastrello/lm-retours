@@ -497,19 +497,31 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 .ham-btn:hover{background:rgba(255,255,255,.12)}
 .ham-btn.active{color:var(--c-brown-light)}
 
-/* ── MOBILE NAV ── */
+/* ── MOBILE HEADER : 2 lignes ── */
 @media(max-width:640px){
   html,body{max-width:100vw;overflow-x:hidden}
-  .header-inner{flex-wrap:nowrap;padding:8px 12px;gap:8px;align-items:center;overflow-x:clip}
-  .header-logo{flex-shrink:0}.header-logo img{height:36px}
-  .nav-tabs{gap:4px;flex-wrap:nowrap;flex-shrink:1;min-width:0}
-  .nav-tab{font-size:11px;padding:5px 10px;white-space:nowrap}
-  .header-right{flex-shrink:0;gap:4px}
+  /* Ligne 1 : logo pleine largeur */
+  .header-inner{flex-direction:column;align-items:stretch;padding:8px 14px 6px;gap:4px;overflow-x:clip}
+  .header-logo{width:100%;padding:2px 0}
+  .header-logo img{height:32px}
+  /* Ligne 2 : ☰ saisie historique cloche déconnexion */
+  .header-right{width:100%;display:flex;align-items:center;gap:6px}
+  .nav-tabs{flex:1;gap:4px;flex-wrap:nowrap;overflow:hidden}
+  .nav-tab{font-size:11px;padding:5px 9px;white-space:nowrap}
+  .ham-btn{flex-shrink:0;font-size:20px;padding:2px 6px}
+  /* Déconnexion → icône seulement */
+  .btn-logout{flex-shrink:0;padding:4px 8px;font-size:16px;background:transparent;border:1px solid rgba(196,67,42,.25);border-radius:8px;color:var(--c-accent);cursor:pointer}
+  .logout-txt{display:none}
+  .logout-ico{display:inline}
+  /* Masquer badge */
   .user-badge{display:none !important}
-  .btn-logout{padding:5px 8px;font-size:11px}
   .badge-ref{display:none}
 }
-@media(min-width:641px){.ham-btn{display:none}}
+@media(min-width:641px){
+  .ham-btn{display:none}
+  .logout-ico{display:none}
+  .logout-txt{display:inline}
+}}
 
 </style>
 </head>
@@ -601,7 +613,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
         </div>
       </div>
       <div class="user-badge" id="userBadge"></div>
-      <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+      <button class="btn-logout" onclick="doLogout()" title="Déconnexion"><span class="logout-txt">Déconnexion</span><span class="logout-ico">⏻</span></button>
     </div>
   </div>
 </header>
@@ -1080,9 +1092,9 @@ function renderNav(){
     if(extra.some(function(t){return t.id===currentPage;}))hb.classList.add("active");
     hb.onclick=openHam;
     // Insérer le ☰ dans header-inner AVANT le logo (à gauche)
-    var hdrInner=document.querySelector(".header-inner");
-    var logo=document.querySelector(".header-logo");
-    if(hdrInner && logo) hdrInner.insertBefore(hb, logo);
+    // Insérer ☰ en premier dans header-right (ligne 2 du header)
+    var hdrRight=document.querySelector(".header-right");
+    if(hdrRight) hdrRight.insertBefore(hb, hdrRight.firstChild);
     else navEl.parentElement.appendChild(hb);
   }
   // Remplir le panneau hamburger
@@ -1097,24 +1109,16 @@ function renderNav(){
       hamItems.appendChild(btn);
       if(i<tabs.length-1){var sep=document.createElement("div");sep.className="ham-sep";hamItems.appendChild(sep);}
     });
-    // Séparateur + infos utilisateur + déconnexion + version
+    // Pied de menu : utilisateur + version
     var sep2=document.createElement("div");sep2.className="ham-sep";sep2.style.margin="12px 0";hamItems.appendChild(sep2);
-    // Utilisateur
     if(currentUser){
       var uinfo=document.createElement("div");
       uinfo.style.cssText="padding:8px 20px;font-size:12px;color:rgba(255,255,255,.4);";
       uinfo.textContent=(currentUser.username||"")+" · "+(currentUser.role||"");
       hamItems.appendChild(uinfo);
     }
-    // Déconnexion
-    var logoutBtn=document.createElement("button");
-    logoutBtn.className="ham-item";
-    logoutBtn.innerHTML='<span class="ham-item-icon">🚪</span>Déconnexion';
-    logoutBtn.onclick=function(){closeHam();logout();};
-    hamItems.appendChild(logoutBtn);
-    // Version
     var vinfo=document.createElement("div");
-    vinfo.style.cssText="padding:10px 20px;font-size:11px;color:rgba(255,255,255,.25);";
+    vinfo.style.cssText="padding:6px 20px 12px;font-size:11px;color:rgba(255,255,255,.2);";
     vinfo.textContent="v"+APP_VERSION;
     hamItems.appendChild(vinfo);
   }
@@ -2797,8 +2801,10 @@ async function subscribeToPush() {
 
     // 4. Supprimer l'entrée en base pour cet utilisateur
     try {
-      await fetch(SUPA_URL+"/rest/v1/lm_push_subscriptions?user_id=eq."+encodeURIComponent(currentUser.id),
-        {method:"DELETE", headers:DB.hR()});
+      await fetch(SUPA_URL+"/rest/v1/lm_push_subscriptions?user_id=eq."+encodeURIComponent(currentUser.id), {
+        method:"DELETE",
+        headers:{apikey:SUPA_KEY, Authorization:"Bearer "+SUPA_KEY, "Content-Type":"application/json"}
+      });
     } catch(e){ console.warn("Delete old sub from DB:", e); }
 
     // 5. Enregistrer en base
