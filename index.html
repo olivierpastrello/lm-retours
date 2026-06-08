@@ -2900,13 +2900,20 @@ async function togglePush() {
     const currentPerm = Notification.permission;
 
     if(currentPerm === "denied") {
-      const isChrome = /chrome/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent);
+      const isAndroid = /android/i.test(navigator.userAgent);
+      const isMobile = /android|iphone|ipad/i.test(navigator.userAgent);
       const isSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
-      let msg = "Notifications bloquées par le navigateur. ";
-      if(isChrome) msg += "Cliquez sur le 🔒 dans la barre d'adresse → Notifications → Autoriser → rechargez.";
-      else if(isSafari) msg += "Réglages iPhone → Safari → Paramètres des sites → Notifications → Autoriser.";
-      else msg += "Vérifiez les paramètres de notification de votre navigateur.";
-      toast(msg, "error"); return;
+      let msg;
+      if(isSafari) {
+        msg = "Notifications bloquées. Sur iPhone : Réglages → Safari → Paramètres des sites → Notifications → Autoriser.";
+      } else if(isAndroid) {
+        msg = "Notifications bloquées. Sur Chrome Android : appuyez sur ⋮ (menu) → Paramètres du site → Notifications → Autoriser. Puis rechargez.";
+      } else {
+        msg = "Notifications bloquées. Dans Chrome : tapez chrome://settings/content/notifications dans la barre d'adresse, trouvez ce site dans 'Bloqués' et autorisez-le. Puis rechargez.";
+      }
+      // Proposer de copier l'URL des paramètres Chrome
+      toast(msg, "error");
+      return;
     }
 
     // ── 4. Demander la permission ──
