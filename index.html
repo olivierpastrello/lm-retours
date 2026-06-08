@@ -1594,7 +1594,7 @@ function resetForm(){
 }
 
 // ─── APP VERSION ───
-const APP_VERSION = "2.0.1";
+const APP_VERSION = "2.0.3";
 
 // ─── SUPABASE STORAGE — PHOTOS ───
 // Bucket created via SQL setup script (see config page)
@@ -2256,7 +2256,7 @@ function populateAllSelects(){
   const formBqEl=document.getElementById("boutique");
   if(formBqEl){ const cur=formBqEl.value, locked=formBqEl.disabled;
     formBqEl.innerHTML='<option value="">Sélectionner…</option>';
-    CFG.boutiques.forEach(b=>{const o=document.createElement("option");o.value=b.code;o.textContent=b.name;formBqEl.appendChild(o);});
+    [...CFG.boutiques].sort((a,b)=>a.name.localeCompare(b.name,'fr')).forEach(b=>{const o=document.createElement("option");o.value=b.code;o.textContent=b.name;formBqEl.appendChild(o);});
     if(cur) formBqEl.value=cur; formBqEl.disabled=locked; }
 
   // history + stats boutique filters : NEVER restore — renderNav controls them
@@ -2279,7 +2279,7 @@ function populateAllSelects(){
     if(!el) return;
     const cur=el.value;
     el.innerHTML='<option value="">'+placeholder+'</option>';
-    CFG.familles.forEach(f=>{const o=document.createElement("option");o.value=f.code;o.textContent=f.name;el.appendChild(o);});
+    [...CFG.familles].sort((a,b)=>a.name.localeCompare(b.name,'fr')).forEach(f=>{const o=document.createElement("option");o.value=f.code;o.textContent=f.name;el.appendChild(o);});
     if(cur) el.value=cur;
   });
 }
@@ -2309,7 +2309,7 @@ function renderActionsGrid(){
   CFG.actions.forEach(a=>{
     const lbl=document.createElement("label");
     lbl.className="check-item"+(checked.includes(a.value)?" checked":"");
-    lbl.onclick=function(){toggleCheck(this,a.value==="autre");};
+    lbl.onclick=function(e){toggleCheck(e,this,a.value==="autre","action");};
     const cb=document.createElement("input");cb.type="checkbox";cb.name="action";cb.value=a.value;cb.checked=checked.includes(a.value);
     const sp=document.createElement("span");sp.textContent=a.label;
     lbl.appendChild(cb);lbl.appendChild(sp);grid.appendChild(lbl);
