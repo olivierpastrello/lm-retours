@@ -275,8 +275,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 .photo-card:hover .photo-card-dl a{opacity:1}
 
 /* ── VERSION ── */
-.version-badge{display:none}
-.version-badge-full{font-size:10px;color:var(--c-muted);font-weight:500;letter-spacing:.3px;margin-left:2px;align-self:flex-end;padding-bottom:2px}
+.version-badge{font-size:10px;color:var(--c-muted);font-weight:500;letter-spacing:.3px;margin-left:8px;align-self:center;flex-shrink:0}
 
 
 
@@ -502,6 +501,8 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 @media(max-width:640px){
   html,body{max-width:100vw;overflow-x:clip}
   .version-badge{display:none!important}
+  #notifBellWrap{flex-shrink:0}
+  #notifBellWrap{flex-shrink:0}
   /* Ligne 1 : logo pleine largeur */
   .header-inner{flex-direction:column;align-items:stretch;padding:8px 14px 6px;gap:4px;overflow-x:clip}
   .header-logo{width:100%;padding:2px 0}
@@ -530,13 +531,14 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 #footerNav{
   display:none;
   position:fixed;bottom:0;left:0;right:0;
-  background:var(--c-paper);
-  border-top:1px solid var(--c-border);
+  background:#FAF8F4;
+  border-top:1px solid #DDD8CE;
   z-index:150;
   padding-bottom:env(safe-area-inset-bottom,0px);
   box-shadow:0 -2px 12px rgba(28,26,23,.06);
 }
-#footerNav.visible{display:flex;position:fixed;bottom:0;left:0;right:0}
+#footerNav.visible{display:flex;position:fixed;bottom:0;left:0;right:0;background:#FAF8F4;box-shadow:0 -2px 12px rgba(28,26,23,.08)}
+@media(prefers-color-scheme:dark){#footerNav,#footerNav.visible{background:#1C1A17;border-top-color:#3A352B}}
 .fn-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;padding:8px 4px 6px;
@@ -566,7 +568,6 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .header-logo{flex:1;text-align:center}
   .header-logo img{height:32px}
   .header-right{flex-shrink:0;display:flex;align-items:center;gap:6px}
-  #notifBellWrap[style*="flex"]{display:flex!important}
   .nav-tabs{display:none!important}
   .btn-logout{display:none!important}
   .user-badge{display:none!important}
@@ -575,6 +576,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 }
 @media(min-width:641px){
   #footerNav{display:none!important}
+  .version-badge{display:inline}
   .ham-btn-hdr{display:none}
   .logout-ico{display:none}
   .logout-txt{display:inline}
@@ -661,7 +663,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
     <div class="version-badge">v2.0.1</div>
     <div class="header-right">
       <div class="nav-tabs" id="navTabs"></div>
-      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none" data-role-only="admin,superviseur">
+      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none" >
         <div class="notif-bell" onclick="toggleNotifPanel()" title="Notifications">🔔
           <div class="notif-dot" id="notifDot"></div>
         </div>
