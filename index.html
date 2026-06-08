@@ -1416,15 +1416,15 @@ async function submitForm(){
       }
       await DB.post("lm_fiches",data);
       showSuccess(data,ref,false);
-      createNotification(data);
+      await createNotification(data);
       // Trigger Edge Function for mobile push
       fetch(PUSH_EDGE_URL, {
         method:"POST",
-        headers:{"Content-Type":"application/json", "Authorization":"Bearer "+SUPA_KEY},
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+SUPA_KEY,"apikey":SUPA_KEY},
         body:JSON.stringify({record:data})
       }).catch(()=>{});
     }
-  }catch(e){toast("Erreur push : "+e.message,"error"); console.error("togglePush:",e);}
+  }catch(e){toast("Erreur enregistrement : "+e.message,"error"); console.error("submitForm:",e);}
   finally{setLoading(false);}
 }
 function showSuccess(data,ref,isEdit){
