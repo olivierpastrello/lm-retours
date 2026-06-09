@@ -473,26 +473,21 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 
 
 /* ── HAMBURGER MENU ── */
-.ham-menu{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
-.ham-menu.open{display:block;pointer-events:auto}
-.ham-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
-.ham-panel{
-  position:absolute;top:0;left:0;bottom:0;width:260px;
-  background:var(--c-dark);display:flex;flex-direction:column;
-  box-shadow:4px 0 24px rgba(0,0,0,.35);overflow-y:auto;
-  transform:translateX(-100%);transition:transform .22s ease;
-}
-.ham-menu.open .ham-panel{transform:translateX(0)}
-.ham-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.1)}
-.ham-title{font-family:var(--font-d,serif);font-size:18px;color:var(--c-cream);letter-spacing:-.3px}
-.ham-close{background:none;border:none;color:var(--c-muted);font-size:22px;cursor:pointer;line-height:1;padding:4px;border-radius:4px}
-.ham-close:hover{color:var(--c-cream);background:rgba(255,255,255,.1)}
-.ham-items{padding:10px 0;flex:1}
-.ham-item{display:flex;align-items:center;gap:12px;width:100%;padding:13px 20px;background:none;border:none;color:rgba(255,255,255,.75);font-family:var(--font-b,sans-serif);font-size:14px;font-weight:500;cursor:pointer;text-align:left;transition:background .12s,color .12s}
-.ham-item:hover{background:rgba(255,255,255,.08);color:#fff}
-.ham-item.active{background:var(--c-brown);color:#fff}
-.ham-item-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0}
-.ham-sep{height:1px;background:rgba(255,255,255,.07);margin:6px 16px}
+
+
+
+
+
+
+
+
+
+
+500;cursor:pointer;text-align:left;transition:background .12s,color .12s}
+
+
+
+
 .ham-btn{background:none;border:none;font-size:22px;color:var(--c-cream);cursor:pointer;padding:3px 8px;border-radius:6px;line-height:1;flex-shrink:0;transition:background .12s}
 .ham-btn:hover{background:rgba(255,255,255,.12)}
 .ham-btn.active{color:var(--c-brown-light)}
@@ -596,6 +591,48 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .logout-ico{display:none}
   .logout-txt{display:inline}
 }
+
+
+/* ── HAMBURGER MENU — THÈME CLAIR ────────── */
+.ham-menu{position:fixed;inset:0;z-index:1000;display:none;pointer-events:none}
+.ham-menu.open{display:block;pointer-events:auto}
+.ham-backdrop{position:absolute;inset:0;background:rgba(28,26,23,.4)}
+.ham-panel{
+  position:absolute;top:0;left:0;bottom:0;width:280px;
+  background:var(--c-paper);
+  display:flex;flex-direction:column;
+  box-shadow:4px 0 32px rgba(28,26,23,.18);
+  overflow-y:auto;
+  transform:translateX(-100%);
+  transition:transform .25s ease;
+}
+.ham-menu.open .ham-panel{transform:translateX(0)}
+.ham-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;
+  border-bottom:1px solid var(--c-border);
+  background:var(--c-sand);
+}
+.ham-title{font-family:var(--font-d,serif);font-size:18px;color:var(--c-dark);letter-spacing:-.3px}
+.ham-close{
+  background:none;border:none;color:var(--c-muted);
+  font-size:22px;cursor:pointer;line-height:1;
+  padding:4px 6px;border-radius:4px;
+}
+.ham-close:hover{color:var(--c-dark);background:var(--c-border)}
+.ham-items{padding:8px 0;flex:1;overflow-y:auto}
+.ham-item{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:12px 20px;
+  background:none;border:none;
+  color:var(--c-mid);
+  font-family:var(--font-b,sans-serif);font-size:14px;font-weight:400;
+  text-align:left;cursor:pointer;
+}
+.ham-item:hover{background:var(--c-sand);color:var(--c-dark)}
+.ham-item.active{background:var(--c-brown);color:#fff}
+.ham-item-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0}
+.ham-sep{height:1px;background:var(--c-border);margin:4px 16px}
 
 </style>
 </head>
@@ -1236,10 +1273,17 @@ function renderNav(){
       hi.appendChild(btn);
       if(i<tabs.length-1){var s=document.createElement("div");s.className="ham-sep";hi.appendChild(s);}
     });
+    // Déconnexion (même style que les autres items)
+    var sepOut=document.createElement("div");sepOut.className="ham-sep";sepOut.style.margin="8px 0";hi.appendChild(sepOut);
+    var logoutHam=document.createElement("button");
+    logoutHam.className="ham-item";
+    logoutHam.innerHTML='<span class="ham-item-icon">⏻</span>Déconnexion';
+    logoutHam.onclick=function(){closeHam();doLogout();};
+    hi.appendChild(logoutHam);
     // Version
-    var sep2=document.createElement("div");sep2.className="ham-sep";sep2.style.margin="12px 0";hi.appendChild(sep2);
+    var sep2=document.createElement("div");sep2.className="ham-sep";sep2.style.margin="8px 0 4px";hi.appendChild(sep2);
     var vi=document.createElement("div");
-    vi.style.cssText="padding:6px 20px 12px;font-size:11px;color:var(--c-muted);opacity:.5;";
+    vi.style.cssText="padding:6px 20px 12px;font-size:11px;color:var(--c-muted);";
     vi.textContent="v"+APP_VERSION;
     hi.appendChild(vi);
   }
