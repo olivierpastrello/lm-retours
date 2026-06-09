@@ -519,20 +519,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   /* Masquer badge */
   .badge-ref{display:none}
 }
-@media(min-width:641px){
-  .header-inner{flex-wrap:wrap;padding-bottom:0}
-  .header-logo{order:1}.header-right{order:3;flex:1}
-  .version-badge{order:2}
-  .user-badge{order:10;margin-left:auto;display:flex!important}
-  .btn-logout{order:11}
-
-  .user-badge{display:flex!important}
-  .user-badge .uname{display:inline!important}
-
-  .ham-btn{display:none}
-  .logout-ico{display:none}
-  .logout-txt{display:inline}
-}}
+}
 
 
 /* ── FOOTER NAV ──────────────────────────── */
@@ -576,7 +563,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   }
   .header-logo{flex:1;text-align:center}
   .header-logo img{height:32px}
-  .header-right{flex-shrink:0;display:flex;align-items:center;gap:6px}
+  .header-right{flex-shrink:0;display:flex;align-items:center;gap:6px;margin-left:auto}
   .nav-tabs{display:none!important}
   .user-badge{display:none!important}
   .btn-logout{display:none!important}
@@ -584,11 +571,23 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .main-wrap{padding-bottom:72px}
 }
 @media(min-width:641px){
+  /* Footer caché */
   #footerNav{display:none!important}
-  .version-badge{display:inline-flex;align-items:center}
+  /* Hamburger caché */
   .ham-btn-hdr{display:none}
+  /* Logout texte visible */
   .logout-ico{display:none}
   .logout-txt{display:inline}
+  /* Header 2 lignes */
+  .header-inner{flex-wrap:wrap;padding:10px 20px 0;gap:0}
+  .header-logo{order:1;flex-shrink:0}
+  .version-badge{order:2;display:inline-flex;align-items:center;margin-left:8px;font-size:11px;color:var(--c-brown-light)}
+  .header-right{order:3;flex:1;display:flex;align-items:center;gap:8px;min-width:0}
+  .nav-tabs{flex:1}
+  /* Ligne 2 : profil + déconnexion */
+  .user-badge{order:10;display:flex!important;align-items:center;margin-left:auto;padding:4px 0 8px;font-size:12px;border-top:1px solid rgba(255,255,255,.08);width:auto}
+  .user-badge .uname{display:inline!important}
+  .btn-logout{order:11;padding:4px 14px 8px;font-size:12px;align-self:center;border-top:1px solid rgba(255,255,255,.08)}
 }
 
 /* ── HAMBURGER FOND CLAIR ──────────────── */
