@@ -2423,13 +2423,13 @@ function renderCfgProduits(){
   const famLabel=document.createElement("label"); famLabel.textContent="Choisir une famille";
   const famSel=document.createElement("select");
   famSel.innerHTML='<option value="">Sélectionner…</option>'+
-    CFG.familles.map(f=>'<option value="'+f.code+'"'+(cfgSelectedFamille===f.code?' selected':'')+'>'+f.name+'</option>').join("");
+    [...CFG.familles].sort((a,b)=>a.name.localeCompare(b.name,'fr')).map(f=>'<option value="'+f.code+'"'+(cfgSelectedFamille===f.code?' selected':'')+'>'+f.name+'</option>').join("");
   famSel.onchange=function(){ cfgSelectedFamille=this.value||null; renderCfgProduits(); };
   famDiv.appendChild(famLabel); famDiv.appendChild(famSel); el.appendChild(famDiv);
 
   if(!cfgSelectedFamille) return;
 
-  const prods=CFG.produits[cfgSelectedFamille]||[];
+  const prods=[...(CFG.produits[cfgSelectedFamille]||[])].sort((a,b)=>a.localeCompare(b,'fr'));
   const list=document.createElement("div"); list.className="cfg-list";
 
   if(!prods.length){
