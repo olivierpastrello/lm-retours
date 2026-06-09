@@ -593,12 +593,14 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   /* Bouton déconnexion header : icône comme mobile */
   .btn-logout-icon{
     display:flex;align-items:center;justify-content:center;
-    padding:6px 8px;
-    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.4);
+    padding:6px 9px;
+    background:var(--c-accent);border:none;
     border-radius:8px;color:#fff;cursor:pointer;
-    transition:background .15s,color .15s;
+    transition:opacity .15s;
     flex-shrink:0;
+    opacity:.9;
   }
+  .btn-logout-icon:hover{opacity:1;background:var(--c-accent)}
   .btn-logout-icon:hover{background:rgba(196,67,42,.3);border-color:var(--c-accent);color:#fff}
   .btn-logout-icon svg{display:block}
   .logout-txt,.logout-ico{display:none}
