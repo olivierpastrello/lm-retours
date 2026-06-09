@@ -572,36 +572,30 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .badge-ref{display:none}
   .main-wrap{padding-bottom:72px}
 }
+
+
+
+/* ── DESKTOP (PC) ──────────────────────────── */
 @media(min-width:641px){
   #footerNav{display:none!important}
-  .ham-btn-hdr{display:none}
+  .fn-item,.footer-nav{display:none!important}
+  /* Hamburger visible sur PC aussi */
+  .ham-btn-hdr{display:flex!important;align-items:center;padding:2px 12px 2px 0;font-size:22px;background:none;border:none;color:var(--c-cream);cursor:pointer}
+  /* Header ligne unique */
+  .header-inner{flex-wrap:nowrap;padding:10px 20px;align-items:center;gap:8px}
+  .header-logo{flex-shrink:0}
+  .version-badge{display:inline-flex!important;align-items:center;font-size:11px;color:var(--c-brown-light);margin-right:8px}
+  .header-right{flex:1;display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .nav-tabs{flex:1;display:flex;gap:4px}
+  /* User badge caché du header (dans le hamburger) */
+  .user-badge{display:none!important}
+  .hdr-break{display:none}
+  /* Bouton déconnexion */
+  .btn-logout{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:6px;color:var(--c-cream);cursor:pointer}
+  .btn-logout:hover{background:rgba(255,255,255,.15)}
   .logout-ico{display:none}
   .logout-txt{display:inline}
-  /* ── Header 2 lignes ── */
-  .header-inner{flex-wrap:wrap;padding:10px 20px 0;gap:0;align-items:center}
-  /* Ligne 1 */
-  .header-logo{order:1;flex-shrink:0}
-  .version-badge{order:2;display:inline-flex!important;align-items:center;margin-left:8px;font-size:11px;color:var(--c-brown-light)}
-  .header-right{order:3;flex:1 0 0%;display:flex;align-items:center;gap:8px;min-width:0}
-  .nav-tabs{flex:1}
-  /* Séparateur ligne 1→2 : force le saut */
-  .hdr-break{order:9;flex-basis:100%;height:1px;background:rgba(255,255,255,.1);margin:0 -20px}
-  /* Ligne 2 */
-  .user-badge{order:10;display:flex!important;align-items:center;gap:6px;padding:5px 0 8px;font-size:12px}
-  .user-badge .uname{display:inline!important}
-  .btn-logout{order:11;padding:5px 16px 8px;font-size:12px;align-self:center;margin-left:auto}
 }
-
-/* ── HAMBURGER FOND CLAIR ──────────────── */
-.ham-panel{background:var(--c-paper)!important;box-shadow:4px 0 24px rgba(28,26,23,.12)!important}
-.ham-header{border-bottom:1px solid var(--c-border)!important;background:var(--c-sand)!important}
-.ham-title{color:var(--c-dark)!important}
-.ham-close{color:var(--c-muted)!important}
-.ham-close:hover{color:var(--c-dark)!important;background:var(--c-sand)!important}
-.ham-item{color:var(--c-mid)!important}
-.ham-item:hover{background:var(--c-sand)!important;color:var(--c-dark)!important}
-.ham-item.active{background:var(--c-brown)!important;color:#fff!important}
-.ham-sep{background:var(--c-border)!important}
 
 </style>
 </head>
@@ -674,7 +668,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
     <div class="version-badge">v2.0.5</div>
     <div class="header-right">
       <div class="nav-tabs" id="navTabs"></div>
-      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none" >
+      <div class="notif-bell-wrap" id="notifBellWrap" style="display:none">
         <div class="notif-bell" onclick="toggleNotifPanel()" title="Notifications">🔔
           <div class="notif-dot" id="notifDot"></div>
         </div>
@@ -691,12 +685,8 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
           <div class="notif-list" id="notifList"><div class="notif-empty">Aucune notification</div></div>
         </div>
       </div>
+      <button class="btn-logout" onclick="doLogout()" title="Déconnexion"><span class="logout-txt">Déconnexion</span><span class="logout-ico">⏻</span></button>
     </div>
-    <!-- Séparateur de ligne pour flex-wrap -->
-    <span class="hdr-break"></span>
-    <!-- Ligne 2 PC : profil + déconnexion -->
-    <div class="user-badge" id="userBadge"></div>
-    <button class="btn-logout" onclick="doLogout()" title="Déconnexion"><span class="logout-txt">Déconnexion</span><span class="logout-ico">⏻</span></button>
   </div>
 </header>
 
@@ -1198,36 +1188,46 @@ function renderNav(){
   var tabs=NAV_CFG[currentUser.role]||NAV_CFG.boutique;
   var mob=window.innerWidth<=640;
   var navEl=document.getElementById("navTabs");
-  // Afficher la cloche pour admin/superviseur
+
+  // Cloche
   var bellWrap=document.getElementById("notifBellWrap");
   if(bellWrap){
     var showBell=(currentUser.role==="admin"||currentUser.role==="superviseur");
     bellWrap.style.display=showBell?"flex":"none";
   }
-  // Afficher le badge utilisateur sur PC
-  var ubEl=document.getElementById("userBadge");
-  if(ubEl && currentUser){
-    var roleLabel={admin:"Admin",superviseur:"Superviseur",boutique:"Boutique"}[currentUser.role]||currentUser.role;
-    ubEl.innerHTML=
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>'+
-      '<span class="uname">'+currentUser.username+'</span>'+
-      '<span style="font-size:10px;opacity:.6;margin-left:2px">'+roleLabel+'</span>';
-  }
+
+  var PRIMARY=["saisie","historique","stats"];
 
   if(mob){
+    // Mobile : footer nav
     if(navEl) navEl.innerHTML="";
     renderFooterNav(tabs);
   } else {
+    // PC : Saisie + Historique + Stats dans le header
     var fn=document.getElementById("footerNav");
     if(fn) fn.classList.remove("visible");
-    if(navEl) navEl.innerHTML=tabs.map(function(t){
-      return'<button class="nav-tab'+(currentPage===t.id?" active":"")+'" data-page="'+t.id+'" onclick="showPage(this.dataset.page)">'+t.label+"</button>";
-    }).join("");
+    if(navEl) navEl.innerHTML=tabs
+      .filter(function(t){return PRIMARY.includes(t.id);})
+      .map(function(t){
+        return'<button class="nav-tab'+(currentPage===t.id?" active":"")+'" data-page="'+t.id+'" onclick="showPage(\''+ t.id +'\')">'+t.label+"</button>";
+      }).join("");
   }
-  // Panneau hamburger (toujours rempli)
+
+  // Hamburger : toutes les pages + profil + version
   var hi=document.getElementById("hamItems");
   if(hi){
     hi.innerHTML="";
+    // Profil en tête du menu
+    if(currentUser){
+      var prof=document.createElement("div");
+      prof.style.cssText="padding:14px 20px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--c-border);margin-bottom:4px;";
+      var roleLabel={admin:"Administrateur",superviseur:"Superviseur",boutique:"Boutique"}[currentUser.role]||currentUser.role;
+      prof.innerHTML=
+        '<div style="width:36px;height:36px;border-radius:50%;background:var(--c-brown);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0">'+(currentUser.username||"?").charAt(0).toUpperCase()+"</div>"+
+        '<div><div style="font-size:13px;font-weight:600;color:var(--c-dark)">'+currentUser.username+'</div><div style="font-size:11px;color:var(--c-muted)">'+roleLabel+"</div></div>";
+      hi.appendChild(prof);
+    }
+    // Onglets
     tabs.forEach(function(t,i){
       var btn=document.createElement("button");
       btn.className="ham-item"+(currentPage===t.id?" active":"");
@@ -1236,19 +1236,15 @@ function renderNav(){
       hi.appendChild(btn);
       if(i<tabs.length-1){var s=document.createElement("div");s.className="ham-sep";hi.appendChild(s);}
     });
-    var s2=document.createElement("div");s2.className="ham-sep";s2.style.margin="12px 0";hi.appendChild(s2);
-    if(currentUser){
-      var ui=document.createElement("div");
-      ui.style.cssText="padding:8px 20px;font-size:12px;color:var(--c-muted);";
-      ui.textContent=(currentUser.username||"")+" · "+(currentUser.role||"");
-      hi.appendChild(ui);
-    }
+    // Version
+    var sep2=document.createElement("div");sep2.className="ham-sep";sep2.style.margin="12px 0";hi.appendChild(sep2);
     var vi=document.createElement("div");
     vi.style.cssText="padding:6px 20px 12px;font-size:11px;color:var(--c-muted);opacity:.5;";
     vi.textContent="v"+APP_VERSION;
     hi.appendChild(vi);
   }
 }
+
 let currentPage="saisie";
 function openHam(){
   var m=document.getElementById("hamMenu");if(m)m.classList.add("open");
