@@ -299,12 +299,14 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
 .date-wrap input[type=date]{padding-left:28px;width:100%}
 
 /* ── NOTIFICATION BADGE ── */
+body.role-boutique #notifBellWrap{display:none!important}
 .notif-dot{position:absolute;top:3px;right:3px;min-width:16px;height:16px;background:var(--c-accent);border-radius:8px;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;display:none}
 .notif-dot.visible{display:flex}
 /* Bell in header */
 .notif-bell{position:relative;cursor:pointer;font-size:18px;padding:4px 6px;border-radius:var(--rs);transition:background .12s;user-select:none;flex-shrink:0}
 .notif-bell:hover{background:rgba(139,115,85,.12)}
-.notif-bell .notif-dot{top:-2px;right:-2px}
+.notif-bell body.role-boutique #notifBellWrap{display:none!important}
+.notif-dot{top:-2px;right:-2px}
 
 /* ── NOTIFICATION PANEL ── */
 .notif-panel{display:none;position:fixed;top:56px;right:16px;width:340px;max-height:calc(100vh - 80px);background:var(--c-paper);border:1px solid var(--c-border);border-radius:var(--r);box-shadow:0 8px 32px rgba(28,26,23,.25);z-index:900;overflow:hidden}
@@ -1242,10 +1244,12 @@ function renderNav(){
   var navEl=document.getElementById("navTabs");
 
   // Cloche
+  // Cloche : visible uniquement pour admin et superviseur
   var bellWrap=document.getElementById("notifBellWrap");
   if(bellWrap){
     var showBell=(currentUser.role==="admin"||currentUser.role==="superviseur");
     bellWrap.style.display=showBell?"flex":"none";
+    bellWrap.setAttribute("aria-hidden", showBell?"false":"true");
   }
 
   var PRIMARY=["saisie","historique","stats"];
@@ -1316,7 +1320,11 @@ function closeHam(){
 var _hamResTO;
 window.addEventListener("resize",function(){
   clearTimeout(_hamResTO);
-  _hamResTO=setTimeout(function(){if(currentUser)renderNav();},200);
+  _hamResTO=setTimeout(function(){if(currentUser)renderNav();
+  // Ajouter classe rôle sur le body pour ciblage CSS
+  document.body.className = document.body.className
+    .replace(/\brole-\w+\b/g, '')
+    .trim() + ' role-' + (currentUser.role||'boutique');},200);
 });
 
 function showPage(name){
@@ -2150,8 +2158,10 @@ async function doForgotPassword(){
 let notifications=[], notifPanelOpen=false;
 
 async function createNotification(data){
-  const roles=["admin","superviseur"];
-  if(!roles.includes(currentUser.role)&&currentUser.role!=="boutique") return;
+  // Tous les rôles créent des notifications visibles par admin/superviseur
+  // La cloche n'est pas montrée aux profils boutique
+  const allowedRoles=["admin","superviseur","boutique"];
+  if(!allowedRoles.includes(currentUser.role)) return;
   try{
     await DB.post("lm_notifications",{
       fiche_ref:data.ref,
