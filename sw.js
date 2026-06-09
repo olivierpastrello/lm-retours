@@ -1,4 +1,4 @@
-const CACHE  = 'lm-retours-v34';
+const CACHE  = 'lm-retours-v35';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 // ── Variable globale : fiche en attente d'ouverture ──────────────────────────
