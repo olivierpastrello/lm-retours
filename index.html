@@ -1050,6 +1050,7 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
         <option value="">Sélectionner…</option>
         <option value="admin">Administrateur</option>
         <option value="superviseur">Superviseur</option>
+        <option value="lecteur">Lecteur</option>
         <option value="boutique">Boutique</option>
       </select>
     </div>
@@ -1239,7 +1240,7 @@ function renderNav(){
   // Cloche : visible uniquement pour admin et superviseur
   var bellWrap=document.getElementById("notifBellWrap");
   if(bellWrap){
-    var showBell=(currentUser.role==="admin"||currentUser.role==="superviseur");
+    var showBell=(currentUser.role==="admin"||currentUser.role==="superviseur"); // lecteur n'a pas de cloche
     bellWrap.style.display=showBell?"flex":"none";
     bellWrap.setAttribute("aria-hidden", showBell?"false":"true");
   }
@@ -2148,7 +2149,7 @@ let notifications=[], notifPanelOpen=false;
 async function createNotification(data){
   // Tous les rôles créent des notifications visibles par admin/superviseur
   // La cloche n'est pas montrée aux profils boutique
-  const allowedRoles=["admin","superviseur","boutique"];
+  const allowedRoles=["admin","superviseur","lecteur","boutique"];
   if(!allowedRoles.includes(currentUser.role)) return;
   try{
     await DB.post("lm_notifications",{
