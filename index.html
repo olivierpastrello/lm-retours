@@ -33,7 +33,7 @@
   --c-green-light:#172B22;--c-blue-light:#151E32;
   --c-header:#252218;--sh:0 2px 12px rgba(0,0,0,.3)
 }}
-html,body{max-width:100%;overflow-x:hidden}body{font-family:var(--font-b);background:var(--c-cream);color:var(--c-dark);min-height:100vh;font-size:15px;line-height:1.6}
+html,body{max-width:100%;overflow-x:clip}body{font-family:var(--font-b);background:var(--c-cream);color:var(--c-dark);min-height:100vh;font-size:15px;line-height:1.6}
 
 /* ── LOADING ── */
 #loadingOverlay{position:fixed;inset:0;background:rgba(28,26,23,.55);z-index:2000;display:flex;align-items:center;justify-content:center}
@@ -586,25 +586,36 @@ input:disabled,select:disabled{opacity:.6;cursor:not-allowed;background:var(--c-
   .user-badge{display:none!important}
   .hdr-break{display:none}
   /* Bouton déconnexion */
-  .btn-logout{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:6px;color:var(--c-cream);cursor:pointer}
-  .btn-logout:hover{background:rgba(255,255,255,.15)}
+  
+  
   .logout-ico{display:none}
   .logout-txt{display:inline}
+  /* Bouton déconnexion header : style nav-tab */
+  .btn-logout{
+    display:flex;align-items:center;gap:6px;
+    padding:5px 12px;font-size:13px;
+    background:none;border:1px solid rgba(255,255,255,.2);
+    border-radius:6px;color:var(--c-cream);cursor:pointer;
+    font-family:var(--font-b,sans-serif);font-weight:500;
+  }
+  .btn-logout:hover{background:rgba(255,255,255,.12)}
+  .logout-txt{color:var(--c-cream)}
 }
 
 
 /* ── HAMBURGER MENU — THÈME CLAIR ────────── */
 .ham-menu{position:fixed;inset:0;z-index:1000;display:none;pointer-events:none}
 .ham-menu.open{display:block;pointer-events:auto}
-.ham-backdrop{position:absolute;inset:0;background:rgba(28,26,23,.4)}
+.ham-backdrop{position:fixed;inset:0;background:rgba(28,26,23,.4);z-index:1000}
 .ham-panel{
-  position:absolute;top:0;left:0;bottom:0;width:280px;
+  position:fixed;top:0;left:0;bottom:0;width:280px;
   background:var(--c-paper);
   display:flex;flex-direction:column;
   box-shadow:4px 0 32px rgba(28,26,23,.18);
   overflow-y:auto;
   transform:translateX(-100%);
   transition:transform .25s ease;
+  z-index:1001;
 }
 .ham-menu.open .ham-panel{transform:translateX(0)}
 .ham-header{
