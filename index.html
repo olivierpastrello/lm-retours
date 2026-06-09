@@ -1197,6 +1197,15 @@ function renderNav(){
     var showBell=(currentUser.role==="admin"||currentUser.role==="superviseur");
     bellWrap.style.display=showBell?"flex":"none";
   }
+  // Afficher le badge utilisateur sur PC
+  var ubEl=document.getElementById("userBadge");
+  if(ubEl && currentUser){
+    var roleLabel={admin:"Admin",superviseur:"Superviseur",boutique:"Boutique"}[currentUser.role]||currentUser.role;
+    ubEl.innerHTML=
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>'+
+      '<span class="uname">'+currentUser.username+'</span>'+
+      '<span style="font-size:10px;opacity:.6;margin-left:2px">'+roleLabel+'</span>';
+  }
 
   if(mob){
     if(navEl) navEl.innerHTML="";
