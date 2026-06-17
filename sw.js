@@ -1,4 +1,4 @@
-const CACHE  = 'lm-retours-v35';
+const CACHE  = 'lm-retours-v36';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 // ── Variable globale : fiche en attente d'ouverture ──────────────────────────
@@ -14,7 +14,7 @@ self.addEventListener('activate', e => {
   );
 });
 self.addEventListener('fetch', e => {
-  if(e.request.url.includes('supabase.co') || e.request.url.includes('fonts.google')) return;
+  if(e.request.url.includes('supabase.co') || e.request.url.includes('fonts.google') || e.request.url.includes('workers.dev')) return;
   if(e.request.method !== 'GET') return;
   e.respondWith(
     fetch(e.request)
