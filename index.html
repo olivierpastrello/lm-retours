@@ -2341,14 +2341,11 @@ function applyConfig(){
 async function saveAppConfig(key,value){
   try{
     // True upsert via ON CONFLICT (merge-duplicates)
-    const r=await fetch(SUPA_URL+"/rest/v1/lm_config",{
+    const r=await fetch(WORKER_URL+"/api/db/lm_config",{
       method:"POST",
-      headers:{
-        apikey:SUPA_KEY,
-        Authorization:"Bearer "+SUPA_KEY,
-        "Content-Type":"application/json",
-        Prefer:"resolution=merge-duplicates,return=representation"
-      },
+      headers:{"Authorization":"Bearer "+getSessionToken(),
+               "Content-Type":"application/json",
+               "Prefer":"resolution=merge-duplicates,return=representation"},
       body:JSON.stringify({key,value,updated_at:new Date().toISOString(),updated_by:currentUser?currentUser.username:""})
     });
     if(!r.ok){const e=await r.text();throw new Error(e);}
